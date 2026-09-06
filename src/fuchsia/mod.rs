@@ -310,9 +310,9 @@ s! {
         __next: *mut c_void,
         __prev: *mut c_void,
         #[cfg(target_pointer_width = "32")]
-        __dummy4: [c_char; 24],
+        __dummy4: Padding<[c_char; 24]>,
         #[cfg(target_pointer_width = "64")]
-        __dummy4: [c_char; 16],
+        __dummy4: Padding<[c_char; 16]>,
     }
 
     // FIXME(1.0): This should not implement `PartialEq`
@@ -777,7 +777,7 @@ s! {
         pub f_fsid: c_ulong,
         pub f_flag: c_ulong,
         pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
+        __f_spare: Padding<[c_int; 6]>,
     }
 
     pub struct stack_t {
@@ -3828,6 +3828,10 @@ extern "C" {
     pub fn mkstemp(template: *mut c_char) -> c_int;
     pub fn mkdtemp(template: *mut c_char) -> *mut c_char;
 
+    #[deprecated(
+        since = "0.2.190",
+        note = "function is obsolete; prefer tmpfile, mkstemp, or similar"
+    )]
     pub fn tmpnam(ptr: *mut c_char) -> *mut c_char;
 
     pub fn openlog(ident: *const c_char, logopt: c_int, facility: c_int);

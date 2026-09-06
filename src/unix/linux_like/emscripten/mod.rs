@@ -112,7 +112,7 @@ s! {
         __f_unused: Padding<c_int>,
         pub f_flag: c_ulong,
         pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
+        __f_spare: Padding<[c_int; 6]>,
     }
 
     pub struct signalfd_siginfo {
@@ -392,6 +392,11 @@ s! {
     pub struct pthread_cond_t {
         size: [u8; crate::__SIZEOF_PTHREAD_COND_T],
     }
+
+    pub struct mmsghdr {
+        pub msg_hdr: crate::msghdr,
+        pub msg_len: c_uint,
+    }
 }
 
 s_no_extra_traits! {
@@ -400,6 +405,16 @@ s_no_extra_traits! {
         priv_: [f64; 3],
     }
 }
+
+// socket.h
+
+pub const SHUT_RD: c_int = 0;
+pub const SHUT_WR: c_int = 1;
+pub const SHUT_RDWR: c_int = 2;
+
+pub const SOCK_RAW: c_int = 3;
+pub const SOCK_RDM: c_int = 4;
+pub const SOCK_CLOEXEC: c_int = O_CLOEXEC;
 
 pub const MADV_SOFT_OFFLINE: c_int = 101;
 pub const MS_NOUSER: c_ulong = 0x80000000;
@@ -1278,6 +1293,10 @@ pub const PRIO_PGRP: c_int = 1;
 pub const PRIO_USER: c_int = 2;
 
 pub const SOMAXCONN: c_int = 128;
+
+// include/paths.h
+pub const _PATH_DEFPATH: *const c_char = cstr(b"/usr/local/bin:/bin:/usr/bin\0");
+pub const _PATH_BSHELL: *const c_char = cstr(b"/bin/sh\0");
 
 f! {
     pub unsafe fn CMSG_NXTHDR(mhdr: *const msghdr, cmsg: *const cmsghdr) -> *mut cmsghdr {

@@ -25,22 +25,7 @@ s! {
 
         pub f_namelen: crate::__fsword_t,
         pub f_frsize: crate::__fsword_t,
-        f_spare: [crate::__fsword_t; 5],
-    }
-
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_errno: c_int,
-        pub si_code: c_int,
-        #[doc(hidden)]
-        #[deprecated(
-            since = "0.2.54",
-            note = "Please leave a comment on \
-                  https://github.com/rust-lang/libc/pull/1316 if you're using \
-                  this field"
-        )]
-        pub _pad: [c_int; 29],
-        _align: [usize; 0],
+        f_spare: Padding<[crate::__fsword_t; 5]>,
     }
 
     pub struct flock {
@@ -123,36 +108,6 @@ s! {
         pub f_frsize: crate::__fsword_t,
         pub f_flags: crate::__fsword_t,
         pub f_spare: [crate::__fsword_t; 4],
-    }
-
-    pub struct statvfs {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: crate::fsblkcnt_t,
-        pub f_bfree: crate::fsblkcnt_t,
-        pub f_bavail: crate::fsblkcnt_t,
-        pub f_files: crate::fsfilcnt_t,
-        pub f_ffree: crate::fsfilcnt_t,
-        pub f_favail: crate::fsfilcnt_t,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
-    pub struct statvfs64 {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: u64,
-        pub f_bfree: u64,
-        pub f_bavail: u64,
-        pub f_files: u64,
-        pub f_ffree: u64,
-        pub f_favail: u64,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
     }
 
     pub struct pthread_attr_t {
@@ -306,9 +261,6 @@ pub const EOWNERDEAD: c_int = 132;
 pub const ENOTRECOVERABLE: c_int = 133;
 pub const EHWPOISON: c_int = 135;
 pub const ERFKILL: c_int = 134;
-
-pub const SOCK_STREAM: c_int = 1;
-pub const SOCK_DGRAM: c_int = 2;
 
 pub const POLLWRNORM: c_short = 4;
 pub const POLLWRBAND: c_short = 0x100;

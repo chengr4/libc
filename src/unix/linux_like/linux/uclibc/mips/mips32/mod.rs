@@ -97,13 +97,6 @@ s! {
         __val: [c_ulong; 4],
     }
 
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_code: c_int,
-        pub si_errno: c_int,
-        pub _pad: [c_int; 29],
-    }
-
     pub struct glob64_t {
         pub gl_pathc: size_t,
         pub gl_pathv: *mut *mut c_char,
@@ -181,7 +174,7 @@ s! {
         pub f_fsid: crate::fsid_t,
 
         pub f_namelen: c_long,
-        f_spare: [c_long; 6],
+        f_spare: Padding<[c_long; 6]>,
     }
 
     pub struct statfs64 {

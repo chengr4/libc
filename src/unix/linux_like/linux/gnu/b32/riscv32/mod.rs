@@ -75,36 +75,6 @@ s! {
         pub f_spare: [c_long; 4],
     }
 
-    pub struct statvfs64 {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: crate::fsblkcnt64_t,
-        pub f_bfree: crate::fsblkcnt64_t,
-        pub f_bavail: crate::fsblkcnt64_t,
-        pub f_files: crate::fsfilcnt64_t,
-        pub f_ffree: crate::fsfilcnt64_t,
-        pub f_favail: crate::fsfilcnt64_t,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        pub __f_spare: [c_int; 6],
-    }
-
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_errno: c_int,
-        pub si_code: c_int,
-        #[doc(hidden)]
-        #[deprecated(
-            since = "0.2.54",
-            note = "Please leave a comment on \
-                  https://github.com/rust-lang/libc/pull/1316 if you're using \
-                  this field"
-        )]
-        pub _pad: [c_int; 29],
-        _align: [u64; 0],
-    }
-
     pub struct stack_t {
         pub ss_sp: *mut c_void,
         pub ss_flags: c_int,
@@ -324,8 +294,6 @@ pub const ENOTRECOVERABLE: c_int = 131;
 pub const EHWPOISON: c_int = 133;
 pub const ERFKILL: c_int = 132;
 
-pub const SOCK_STREAM: c_int = 1;
-pub const SOCK_DGRAM: c_int = 2;
 pub const POLLWRNORM: c_short = 256;
 pub const POLLWRBAND: c_short = 512;
 pub const O_ASYNC: c_int = 8192;

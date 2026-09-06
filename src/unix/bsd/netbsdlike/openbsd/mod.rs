@@ -1096,6 +1096,12 @@ pub const MAP_NORESERVE: c_int = 0x0000;
 pub const MAP_HASSEMAPHORE: c_int = 0x0000;
 pub const MAP_TRYFIXED: c_int = 0;
 
+// minherit syscall inherit values
+pub const MAP_INHERIT_SHARE: c_int = 0;
+pub const MAP_INHERIT_COPY: c_int = 1;
+pub const MAP_INHERIT_NONE: c_int = 2;
+pub const MAP_INHERIT_ZERO: c_int = 3;
+
 pub const EIPSEC: c_int = 82;
 pub const ENOMEDIUM: c_int = 85;
 pub const EMEDIUMTYPE: c_int = 86;
@@ -1830,6 +1836,11 @@ pub const RTAX_MAX: c_int = 15;
 const fn _ALIGN(p: usize) -> usize {
     (p + _ALIGNBYTES) & !_ALIGNBYTES
 }
+
+// include/paths.h
+pub const _PATH_DEFPATH: *const c_char =
+    cstr(b"/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin\0");
+pub const _PATH_BSHELL: *const c_char = cstr(b"/bin/sh\0");
 
 f! {
     pub unsafe fn CMSG_DATA(cmsg: *const cmsghdr) -> *mut c_uchar {

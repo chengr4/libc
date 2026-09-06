@@ -25,7 +25,7 @@ s! {
         pub f_namelen: c_uint,
         pub f_frsize: c_uint,
         pub f_flags: c_uint,
-        f_spare: [c_uint; 4],
+        f_spare: Padding<[c_uint; 4]>,
     }
 
     pub struct flock {
@@ -42,14 +42,6 @@ s! {
         pub l_start: off64_t,
         pub l_len: off64_t,
         pub l_pid: crate::pid_t,
-    }
-
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_errno: c_int,
-        pub si_code: c_int,
-        _pad: Padding<c_int>,
-        _pad2: Padding<[c_long; 14]>,
     }
 
     pub struct stack_t {
@@ -130,21 +122,6 @@ s! {
         __unused5: Padding<c_ulong>,
     }
 
-    pub struct statvfs {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: crate::fsblkcnt_t,
-        pub f_bfree: crate::fsblkcnt_t,
-        pub f_bavail: crate::fsblkcnt_t,
-        pub f_files: crate::fsfilcnt_t,
-        pub f_ffree: crate::fsfilcnt_t,
-        pub f_favail: crate::fsfilcnt_t,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
     pub struct __psw_t {
         pub mask: u64,
         pub addr: u64,
@@ -184,21 +161,6 @@ s! {
         pub f_frsize: c_uint,
         pub f_flags: c_uint,
         pub f_spare: [c_uint; 4],
-    }
-
-    pub struct statvfs64 {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: u64,
-        pub f_bfree: u64,
-        pub f_bavail: u64,
-        pub f_files: u64,
-        pub f_ffree: u64,
-        pub f_favail: u64,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
     }
 }
 
@@ -297,9 +259,6 @@ pub const O_EXCL: c_int = 128;
 pub const O_NONBLOCK: c_int = 2048;
 pub const SIGSTKSZ: size_t = 0x2000;
 pub const MINSIGSTKSZ: size_t = 2048;
-
-pub const SOCK_STREAM: c_int = 1;
-pub const SOCK_DGRAM: c_int = 2;
 
 pub const O_NOCTTY: c_int = 256;
 pub const O_SYNC: c_int = 1052672;

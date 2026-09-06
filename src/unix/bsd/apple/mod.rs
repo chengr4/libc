@@ -638,7 +638,7 @@ s! {
         /// Current SVGID on process.
         pub pbsi_svgid: crate::gid_t,
         /// Reserved for future use.
-        pbsi_rfu: u32,
+        pbsi_rfu: Padding<u32>,
     }
 
     #[cfg(target_os = "macos")]
@@ -3423,6 +3423,10 @@ pub const VM_PROT_NONE: crate::vm_prot_t = 0x00;
 pub const VM_PROT_READ: crate::vm_prot_t = 0x01;
 pub const VM_PROT_WRITE: crate::vm_prot_t = 0x02;
 pub const VM_PROT_EXECUTE: crate::vm_prot_t = 0x04;
+pub const VM_INHERIT_SHARE: c_int = 0;
+pub const VM_INHERIT_COPY: c_int = 1;
+pub const VM_INHERIT_NONE: c_int = 2;
+pub const VM_INHERIT_DONATE_COPY: c_int = 3;
 pub const MEMORY_OBJECT_NULL: crate::memory_object_t = 0;
 pub const HW_MACHINE: c_int = 1;
 pub const HW_MODEL: c_int = 2;
@@ -3556,6 +3560,7 @@ pub const XATTR_NODEFAULT: c_int = 0x0010;
 pub const XATTR_SHOWCOMPRESSION: c_int = 0x0020;
 
 pub const NET_RT_IFLIST2: c_int = 0x0006;
+pub const NET_RT_DUMP2: c_int = 0x0007;
 
 cfg_if! {
     if #[cfg(target_os = "macos")] {
@@ -4109,6 +4114,10 @@ pub const VMADDR_CID_HYPERVISOR: c_uint = 0;
 pub const VMADDR_CID_RESERVED: c_uint = 1;
 pub const VMADDR_CID_HOST: c_uint = 2;
 pub const VMADDR_PORT_ANY: c_uint = 0xFFFFFFFF;
+
+// include/paths.h
+pub const _PATH_DEFPATH: *const c_char = cstr(b"/usr/bin:/bin\0");
+pub const _PATH_BSHELL: *const c_char = cstr(b"/bin/sh\0");
 
 const fn __DARWIN_ALIGN32(p: usize) -> usize {
     const __DARWIN_ALIGNBYTES32: usize = size_of::<u32>() - 1;

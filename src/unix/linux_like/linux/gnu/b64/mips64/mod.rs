@@ -46,7 +46,7 @@ s! {
         pub f_fsid: crate::fsid_t,
 
         pub f_namelen: c_long,
-        f_spare: [c_long; 6],
+        f_spare: Padding<[c_long; 6]>,
     }
 
     pub struct flock {
@@ -103,36 +103,6 @@ s! {
         pub f_spare: [c_long; 5],
     }
 
-    pub struct statvfs {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: crate::fsblkcnt_t,
-        pub f_bfree: crate::fsblkcnt_t,
-        pub f_bavail: crate::fsblkcnt_t,
-        pub f_files: crate::fsfilcnt_t,
-        pub f_ffree: crate::fsfilcnt_t,
-        pub f_favail: crate::fsfilcnt_t,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
-    pub struct statvfs64 {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: u64,
-        pub f_bfree: u64,
-        pub f_bavail: u64,
-        pub f_files: u64,
-        pub f_ffree: u64,
-        pub f_favail: u64,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
     pub struct pthread_attr_t {
         __size: [c_ulong; 7],
     }
@@ -141,14 +111,6 @@ s! {
         pub ss_sp: *mut c_void,
         pub ss_size: size_t,
         pub ss_flags: c_int,
-    }
-
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_code: c_int,
-        pub si_errno: c_int,
-        _pad: Padding<c_int>,
-        _pad2: Padding<[c_long; 14]>,
     }
 
     pub struct ipc_perm {
@@ -690,9 +652,6 @@ pub const MAP_POPULATE: c_int = 0x10000;
 pub const MAP_NONBLOCK: c_int = 0x20000;
 pub const MAP_STACK: c_int = 0x40000;
 pub const MAP_HUGETLB: c_int = 0x080000;
-
-pub const SOCK_STREAM: c_int = 2;
-pub const SOCK_DGRAM: c_int = 1;
 
 pub const POLLWRNORM: c_short = 0x004;
 pub const POLLWRBAND: c_short = 0x100;

@@ -389,7 +389,7 @@ s! {
         pub t: ptp_clock_time,
         index: c_uint,
         flags: c_uint,
-        rsv: [c_uint; 2],
+        rsv: Padding<[c_uint; 2]>,
     }
 
     // linux/wireless.h
@@ -1013,7 +1013,7 @@ s! {
 }
 
 cfg_if! {
-    if #[cfg(not(target_env = "gnu"))] {
+    if #[cfg(not(any(target_env = "gnu", target_env = "uclibc")))] {
         extern_ty! {
             // FIXME(1.0,deprecate): lfs binding to be removed
             pub type fpos64_t; // FIXME(linux): fill this out with a struct
@@ -1478,6 +1478,7 @@ pub const ETH_P_AOE: c_int = 0x88A2;
 pub const ETH_P_8021AD: c_int = 0x88A8;
 pub const ETH_P_802_EX1: c_int = 0x88B5;
 pub const ETH_P_TIPC: c_int = 0x88CA;
+pub const ETH_P_LLDP: c_int = 0x88CC;
 pub const ETH_P_MACSEC: c_int = 0x88E5;
 pub const ETH_P_8021AH: c_int = 0x88E7;
 pub const ETH_P_MVRP: c_int = 0x88F5;
@@ -2557,6 +2558,20 @@ pub const IN_ONLYDIR: u32 = 0x0100_0000;
 pub const IN_DONT_FOLLOW: u32 = 0x0200_0000;
 pub const IN_EXCL_UNLINK: u32 = 0x0400_0000;
 
+// uapi/linux/magic.h
+// Most `*_SUPER_MAGIC` constants are defined at the `linux_like` level; the
+// following are only available on newer Linux versions than the versions
+// currently used in CI in some configurations, so we define them here.
+cfg_if! {
+    if #[cfg(not(target_arch = "s390x"))] {
+        pub const BINDERFS_SUPER_MAGIC: c_long = 0x6c6f6f70;
+        pub const XFS_SUPER_MAGIC: c_long = 0x58465342;
+    } else if #[cfg(target_arch = "s390x")] {
+        pub const BINDERFS_SUPER_MAGIC: c_uint = 0x6c6f6f70;
+        pub const XFS_SUPER_MAGIC: c_uint = 0x58465342;
+    }
+}
+
 // uapi/linux/securebits.h
 const SECURE_NOROOT: c_int = 0;
 const SECURE_NOROOT_LOCKED: c_int = 1;
@@ -3299,12 +3314,11 @@ pub const XDP_OPTIONS_ZEROCOPY: crate::__u32 = 1 << 0;
 
 pub const XDP_PGOFF_RX_RING: crate::off_t = 0;
 pub const XDP_PGOFF_TX_RING: crate::off_t = 0x80000000u32 as crate::off_t;
-pub const XDP_UMEM_PGOFF_FILL_RING: crate::c_ulonglong = 0x100000000;
-pub const XDP_UMEM_PGOFF_COMPLETION_RING: crate::c_ulonglong = 0x180000000;
+pub const XDP_UMEM_PGOFF_FILL_RING: c_ulonglong = 0x100000000;
+pub const XDP_UMEM_PGOFF_COMPLETION_RING: c_ulonglong = 0x180000000;
 
 pub const XSK_UNALIGNED_BUF_OFFSET_SHIFT: c_int = 48;
-pub const XSK_UNALIGNED_BUF_ADDR_MASK: crate::c_ulonglong =
-    (1 << XSK_UNALIGNED_BUF_OFFSET_SHIFT) - 1;
+pub const XSK_UNALIGNED_BUF_ADDR_MASK: c_ulonglong = (1 << XSK_UNALIGNED_BUF_OFFSET_SHIFT) - 1;
 
 pub const XDP_PKT_CONTD: crate::__u32 = 1 << 0;
 
@@ -3569,10 +3583,10 @@ extern "C" {
     #[cfg_attr(musl_redir_time64, link_name = "__sigtimedwait_time64")]
     pub fn sigtimedwait(
         set: *const sigset_t,
-        info: *mut siginfo_t,
+        info: *mut crate::siginfo_t,
         timeout: *const crate::timespec,
     ) -> c_int;
-    pub fn sigwaitinfo(set: *const sigset_t, info: *mut siginfo_t) -> c_int;
+    pub fn sigwaitinfo(set: *const sigset_t, info: *mut crate::siginfo_t) -> c_int;
     pub fn accept4(fd: c_int, addr: *mut crate::sockaddr, len: *mut socklen_t, flg: c_int)
         -> c_int;
     pub fn reboot(how_to: c_int) -> c_int;

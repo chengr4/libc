@@ -132,7 +132,7 @@ s! {
 
         pub f_namelen: c_long,
         pub f_flags: c_long,
-        f_spare: [c_long; 5],
+        f_spare: Padding<[c_long; 5]>,
     }
 
     pub struct statfs64 {
@@ -150,33 +150,10 @@ s! {
         pub f_spare: [c_long; 5],
     }
 
-    pub struct statvfs64 {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: u64,
-        pub f_bfree: u64,
-        pub f_bavail: u64,
-        pub f_files: u64,
-        pub f_ffree: u64,
-        pub f_favail: u64,
-        pub f_fsid: c_ulong,
-        __f_unused: Padding<c_int>,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
     pub struct stack_t {
         pub ss_sp: *mut c_void,
         pub ss_size: size_t,
         pub ss_flags: c_int,
-    }
-
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_code: c_int,
-        pub si_errno: c_int,
-        pub _pad: [c_int; 29],
     }
 
     pub struct ipc_perm {
@@ -751,9 +728,6 @@ pub const MAP_LOCKED: c_int = 0x8000;
 pub const MAP_POPULATE: c_int = 0x10000;
 pub const MAP_NONBLOCK: c_int = 0x20000;
 pub const MAP_STACK: c_int = 0x40000;
-
-pub const SOCK_STREAM: c_int = 2;
-pub const SOCK_DGRAM: c_int = 1;
 
 pub const POLLWRNORM: c_short = 0x004;
 pub const POLLWRBAND: c_short = 0x100;

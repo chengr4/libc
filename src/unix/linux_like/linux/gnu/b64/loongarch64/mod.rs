@@ -101,36 +101,6 @@ s! {
         pub l_pid: crate::pid_t,
     }
 
-    pub struct statvfs {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: crate::fsblkcnt_t,
-        pub f_bfree: crate::fsblkcnt_t,
-        pub f_bavail: crate::fsblkcnt_t,
-        pub f_files: crate::fsfilcnt_t,
-        pub f_ffree: crate::fsfilcnt_t,
-        pub f_favail: crate::fsfilcnt_t,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
-    pub struct statvfs64 {
-        pub f_bsize: c_ulong,
-        pub f_frsize: c_ulong,
-        pub f_blocks: u64,
-        pub f_bfree: u64,
-        pub f_bavail: u64,
-        pub f_files: u64,
-        pub f_ffree: u64,
-        pub f_favail: u64,
-        pub f_fsid: c_ulong,
-        pub f_flag: c_ulong,
-        pub f_namemax: c_ulong,
-        __f_spare: [c_int; 6],
-    }
-
     pub struct pthread_attr_t {
         __size: [c_ulong; 7],
     }
@@ -139,21 +109,6 @@ s! {
         pub ss_sp: *mut c_void,
         pub ss_flags: c_int,
         pub ss_size: size_t,
-    }
-
-    pub struct siginfo_t {
-        pub si_signo: c_int,
-        pub si_errno: c_int,
-        pub si_code: c_int,
-        #[doc(hidden)]
-        #[deprecated(
-            since = "0.2.54",
-            note = "Please leave a comment on \
-                  https://github.com/rust-lang/libc/pull/1316 if you're using \
-                  this field"
-        )]
-        pub _pad: [c_int; 29],
-        _align: [u64; 0],
     }
 
     pub struct ipc_perm {
@@ -709,9 +664,6 @@ pub const MAP_SYNC: c_int = 0x080000;
 pub const MCL_CURRENT: c_int = 0x0001;
 pub const MCL_FUTURE: c_int = 0x0002;
 pub const MCL_ONFAULT: c_int = 0x0004;
-
-pub const SOCK_STREAM: c_int = 1;
-pub const SOCK_DGRAM: c_int = 2;
 
 pub const SFD_NONBLOCK: c_int = 0x800;
 pub const SFD_CLOEXEC: c_int = 0x080000;

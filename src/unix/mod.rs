@@ -1660,8 +1660,10 @@ extern "C" {
     pub fn sem_wait(sem: *mut sem_t) -> c_int;
     pub fn sem_trywait(sem: *mut sem_t) -> c_int;
     pub fn sem_post(sem: *mut sem_t) -> c_int;
+    #[cfg(not(all(target_os = "linux", target_env = "gnu")))] // defined in new/glibc
     #[cfg_attr(gnu_file_offset_bits64, link_name = "statvfs64")]
     pub fn statvfs(path: *const c_char, buf: *mut crate::statvfs) -> c_int;
+    #[cfg(not(all(target_os = "linux", target_env = "gnu")))] // defined in new/glibc
     #[cfg_attr(gnu_file_offset_bits64, link_name = "fstatvfs64")]
     pub fn fstatvfs(fd: c_int, buf: *mut crate::statvfs) -> c_int;
 
@@ -2149,6 +2151,10 @@ extern "C" {
     pub fn mkstemp(template: *mut c_char) -> c_int;
     pub fn mkdtemp(template: *mut c_char) -> *mut c_char;
 
+    #[deprecated(
+        since = "0.2.190",
+        note = "function is obsolete; prefer tmpfile, mkstemp, or similar"
+    )]
     pub fn tmpnam(ptr: *mut c_char) -> *mut c_char;
 
     pub fn openlog(ident: *const c_char, logopt: c_int, facility: c_int);

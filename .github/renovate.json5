@@ -3,28 +3,50 @@
   extends: [
     "config:recommended",
     ":maintainLockFilesMonthly",
-    "helpers:pinGitHubActionDigestsToSemver"
+    "helpers:pinGitHubActionDigestsToSemver",
   ],
+  commitMessagePrefix: "deps:",
+  baseBranchPatterns: ["main", "libc-0.2"],
+  lockFileMaintenance: {
+    enabled: true,
+    // Every other Monday. Renovate requires a range, hence `* *` rather
+    // than `0 0`.
+    schedule: ["* * 1-7,15-21 * 1"],
+  },
+  // Don't update docker files that need an old version
+  ignorePaths: ["ci/docker/{arm,powerpc}-unknown-linux-gnu*"],
   packageRules: [
     {
-      matchCategories: [
-        "rust"
-      ],
-      matchJsonata: [
-        "isBreaking != true"
-      ],
+      matchCategories: ["rust"],
+      matchJsonata: ["isBreaking != true"],
       // Disable non-breaking change updates because they
       // are updated periodically with lockfile maintainance.
       enabled: false,
     },
     {
-      matchManagers: [
-        "github-actions"
-      ],
-      // Every month
-      schedule: "* 0 1 * *",
-      groupName: "Github Actions",
-    }
+      matchCategories: ["rust"],
+      // Separate PRs against main and 0.2
+      addLabels: ["stable-declined"],
+    },
+    {
+      matchManagers: ["github-actions"],
+      // Every other Monday
+      schedule: "* * 1-7,15-21 * 1",
+      commitMessagePrefix: "ci:",
+      // Group all updates into one PR
+      groupName: "Github Actions"
+    },
+    {
+      matchManagers: ["github-actions"],
+      matchBaseBranches: ["main"],
+      // Separate PRs against main and 0.2
+      addLabels: ["stable-declined"],
+    },
+    {
+      // We do docker updates manually
+      matchDatasources: ["docker"],
+      enabled: false,
+    },
   ],
   // Receive any update that fixes security vulnerabilities.
   // We need this because we disabled "patch" updates for Rust.
